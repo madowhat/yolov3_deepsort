@@ -18,8 +18,7 @@ def main(_argv):
     yolo.summary()
     logging.info('model created')
 
-    load_darknet_weights(yolo, FLAGS
-                         , FLAGS.tiny)
+    load_darknet_weights(yolo, FLAGS, FLAGS.tiny)
     logging.info('weights loaded')
 
     img = np.random.random((1, 320, 320, 3)).astype(np.float32)
