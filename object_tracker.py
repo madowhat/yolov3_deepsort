@@ -117,18 +117,21 @@ def main(_argv):
         # Call the tracker
         tracker.predict()
         tracker.update(detections)
-
+        frame_index = frame_index + 1
+        list_file.write(str(frame_index)+' ')
         for track in tracker.tracks:
             if not track.is_confirmed() or track.time_since_update > 1:
                 continue 
             bbox = track.to_tlbr()
+            center = (int(bbox[0]) + ((int(bbox[2]) - int(bbox[0])) // 2)), (int(bbox[1]) + ((int(bbox[3]) - int(bbox[1])) // 2)) # X + Width / 2, Y + Height / 2
+            list_file.write(str(track.track_id) + ' ' + str(center))
             class_name = track.get_class()
             color = colors[int(track.track_id) % len(colors)]
             color = [i * 255 for i in color]
             cv2.rectangle(img, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), color, 2)
             cv2.rectangle(img, (int(bbox[0]), int(bbox[1]-30)), (int(bbox[0])+(len(class_name)+len(str(track.track_id)))*17, int(bbox[1])), color, -1)
             cv2.putText(img, class_name + "-" + str(track.track_id),(int(bbox[0]), int(bbox[1]-10)),0, 0.75, (255,255,255),2)
-            
+        list_file.write('\n')
         ### UNCOMMENT BELOW IF YOU WANT CONSTANTLY CHANGING YOLO DETECTIONS TO BE SHOWN ON SCREEN
         #for det in detections:
         #    bbox = det.to_tlbr() 
@@ -141,12 +144,12 @@ def main(_argv):
         # cv2.imshow('output', img)
         if FLAGS.output:
             out.write(img)
-            frame_index = frame_index + 1
-            list_file.write(str(frame_index)+' ')
-            if len(converted_boxes) != 0:
-                for i in range(0,len(converted_boxes)):
-                    list_file.write(str(converted_boxes[i][0]) + ' '+str(converted_boxes[i][1]) + ' '+str(converted_boxes[i][2]) + ' '+str(converted_boxes[i][3]) + ' ')
-            list_file.write('\n')
+            # frame_index = frame_index + 1
+            # list_file.write(str(frame_index)+' ')
+            # if len(converted_boxes) != 0:
+            #     for i in range(0,len(converted_boxes)):
+            #         list_file.write(str(converted_boxes[i][0]) + ' '+str(converted_boxes[i][1]) + ' '+str(converted_boxes[i][2]) + ' '+str(converted_boxes[i][3]) + ' ')
+            # list_file.write('\n')
 
         # press q to quit
         if cv2.waitKey(1) == ord('q'):
