@@ -71,9 +71,8 @@ def main(_argv):
         fps = int(vid.get(cv2.CAP_PROP_FPS))
         codec = cv2.VideoWriter_fourcc(*FLAGS.output_format)
         out = cv2.VideoWriter(FLAGS.output, codec, fps, (width, height))
-        list_file = open('detection.txt', 'w')
-        frame_index = -1 
-    
+    list_file = open('detection.txt', 'w')
+    frame_index = -1 
     fps = 0.0
     count = 0 
     while True:
@@ -118,13 +117,13 @@ def main(_argv):
         tracker.predict()
         tracker.update(detections)
         frame_index = frame_index + 1
-        list_file.write(str(frame_index)+' ')
+        #list_file.write(str(frame_index)+' ')
         for track in tracker.tracks:
             if not track.is_confirmed() or track.time_since_update > 1:
                 continue 
             bbox = track.to_tlbr()
             center = (int(bbox[0]) + ((int(bbox[2]) - int(bbox[0])) // 2)), (int(bbox[1]) + ((int(bbox[3]) - int(bbox[1])) // 2)) # X + Width / 2, Y + Height / 2
-            list_file.write(str(track.track_id) + ' ' + str(center))
+            list_file.write(str(track.track_id) + ' ' + str(center[0]) + ' ' + str(center[1]) + ' ')
             class_name = track.get_class()
             color = colors[int(track.track_id) % len(colors)]
             color = [i * 255 for i in color]
