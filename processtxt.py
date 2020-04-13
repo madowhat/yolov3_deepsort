@@ -10,3 +10,7 @@ for line in open('detection.txt'):
 a = a.astype('int16')
 a = a[a[:,0].argsort(kind='mergesort')]
 a = np.delete(a,0,0)
+print(a)
+#b = np.core.records.fromarrays(a.transpose(), names='track_id, xcoor, ycoor', dtype= 'int16, int16, int16')
+#print(b)
+#print(a[:20,:])
